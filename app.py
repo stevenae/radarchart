@@ -42,25 +42,18 @@ addresses = list(preds_df[address_col].sort_values())
 
 ui.page_opts(title="Real-Steal.com", fillable=True)
 
-with ui.sidebar():
-    ui.input_selectize(
-        id="selectize",
-        label="Homes to compare:",
-        choices=[],
-        multiple=True,
-        options = {"placeholder": "Click here to enter address",
-                   'closeAfterSelect':True,
-                   'maxOptions':10}
-    )
+# with ui.sidebar():
+#     ui.input_selectize(
+#         id="selectize",
+#         label="Homes to compare:",
+#         choices=[],
+#         multiple=True,
+#         options = {"placeholder": "Click here to enter address",
+#                    'closeAfterSelect':True,
+#                    'maxOptions':10}
+#     )
 
-    @render.data_frame
-    def nowcast_table():
-        nowcast = subset_nowcast()
-        nowcast = nowcast.rename(columns=pretty_names)
-        nowcast[nowcast_price_col] = nowcast[nowcast_price_col].div(1e3).map('${:,.0f}K'.format)
-        return render.DataGrid(nowcast,
-            selection_mode="row",
-            summary=False)
+    
 
 @reactive.effect
 def _():
@@ -103,6 +96,15 @@ def nowcast_similars():
 
 with ui.navset_pill(id="tab"):
     with ui.nav_panel(title="Comparison",value='comparison_tab'):
+        ui.input_selectize(
+            id="selectize",
+            label="Homes to compare:",
+            choices=[],
+            multiple=True,
+            options = {"placeholder": "Click here to enter address",
+                    'closeAfterSelect':True,
+                    'maxOptions':10}
+        )
         @render_plotly
         def radar():
             similars = nowcast_similars()
@@ -111,3 +113,12 @@ with ui.navset_pill(id="tab"):
             similars = similars.melt(id_vars=address_col,var_name='Attribute',value_name='Percentile')
             fig = px.line_polar(similars, r='Percentile', color=address_col, theta='Attribute', line_close=True)
             return fig
+
+        @render.data_frame
+        def nowcast_table():
+            nowcast = subset_nowcast()
+            nowcast = nowcast.rename(columns=pretty_names)
+            nowcast[nowcast_price_col] = nowcast[nowcast_price_col].div(1e3).map('${:,.0f}K'.format)
+            return render.DataGrid(nowcast,
+                selection_mode="row",
+                summary=False)
