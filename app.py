@@ -19,7 +19,7 @@ nowcast_select_cols = [*rank_cols,nowcast_price_col,address_col,*location_cols]
 # fileUrl = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?gid=1756589102&format=csv"
 # www_dir = Path(__file__).parent.resolve() / "www"
 # preds_df = pd.read_csv(Path(__file__).parent / "nowcast_predictions.csv", usecols=nowcast_select_cols)
-preds_df = pd.read_csv(os.path.expanduser('~/Documents/nowcast_predictions.csv'),
+preds_df = pd.read_csv('nowcast_predictions.csv',
                        usecols=nowcast_select_cols)
 preds_df = preds_df.rename({'ADDRESS':'Address'}, axis='columns')
 address_col = 'Address'
@@ -41,19 +41,6 @@ rank_cols.remove('YR_RMDL')
 addresses = list(preds_df[address_col].sort_values())
 
 ui.page_opts(title="Real-Steal.com", fillable=True)
-
-# with ui.sidebar():
-#     ui.input_selectize(
-#         id="selectize",
-#         label="Homes to compare:",
-#         choices=[],
-#         multiple=True,
-#         options = {"placeholder": "Click here to enter address",
-#                    'closeAfterSelect':True,
-#                    'maxOptions':10}
-#     )
-
-    
 
 @reactive.effect
 def _():
@@ -103,7 +90,7 @@ with ui.navset_pill(id="tab"):
             multiple=True,
             options = {"placeholder": "Click here to enter address",
                     'closeAfterSelect':True,
-                    'maxOptions':10}
+                    'maxOptions':10,}
         )
         @render_plotly
         def radar():
