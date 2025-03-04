@@ -1,4 +1,4 @@
-#!/Users/steven/Documents/GitHub/radarchart/.venv/bin/python
+#!/Users/steven/Documents/GitHub/radarchart/.venv/bin/python3.12
 # -*- coding: utf-8 -*-
 import re
 import sys
